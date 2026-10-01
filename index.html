@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>[Project Name]: A global map of local problems</title>
+<meta name="description" content="A global map of local problems — Connecting concern into action.">
+<meta name="theme-color" content="#0A0820">
+<script>try{var t=JSON.parse(localStorage.getItem("map-mockup-v1")||"{}").theme;document.documentElement.setAttribute("data-theme",t==="day"||t==="light"?"day":"night")}catch(e){document.documentElement.setAttribute("data-theme","night")}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#home" aria-label="Home"><span class="mark" aria-hidden="true"></span><b id="brandName"></b></a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#map" data-nav="map">Map</a>
+      <a href="#problems" data-nav="problems">Problems</a>
+      <a href="#projects" data-nav="projects">Projects</a>
+      <a href="#people" data-nav="people">People</a>
+      <a href="#about" data-nav="about">About</a>
+    </nav>
+    <div class="nav-right">
+      <button class="icon-btn" type="button" id="searchOpen" aria-label="Search places, problems, projects and people">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+      </button>
+      <button class="icon-btn theme-btn" type="button" id="themeBtn" aria-label="Switch between night and day">
+        <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+      </button>
+      <div style="position:relative">
+        <button class="icon-btn" type="button" id="bellBtn" aria-label="Notifications" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 1 1 12 0v5l2 2H4l2-2Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+          <span class="dot-badge" id="bellCount" hidden>0</span>
+        </button>
+        <div class="drop" id="bellDrop" hidden></div>
+      </div>
+      <a class="btn primary desk" href="#map" data-action="post">I see this problem</a>
+      <a class="avatar" id="meBtn" href="#join" aria-label="Join">+</a>
+    </div>
+  </div>
+</header>
+<div class="banner actas" id="actAsBanner" hidden></div>
+<div class="banner" id="demoBanner" hidden></div>
+
+<main id="main" tabindex="-1">
+  <!-- HOME -->
+  <section class="view" id="view-home" hidden>
+    <div class="hero-night">
+      <div class="stars" aria-hidden="true"></div>
+      <div class="wrap hero-copy">
+        <p class="kicker"><span class="badge">Mock-up v1</span><span id="heroName"></span><span>Sample data. Your changes stay on this device.</span></p>
+        <h1 class="h-hero" id="heroTitle"></h1>
+        <div class="row">
+          <a class="btn primary big" href="#map" data-action="post" id="heroPrompt"></a>
+          <a class="btn big glass" href="#map">Explore the map</a>
+        </div>
+      </div>
+      <div class="earth"><div class="map-slot" id="heroMapSlot"></div></div>
+      <dl class="hud" id="heroStats"></dl>
+      <a class="btn glass globe-cta" href="#map">Open the map</a>
+    </div>
+    <div id="homeRest"></div>
+  </section>
+
+  <!-- MAP -->
+  <section class="view view-map" id="view-map" hidden aria-label="Map">
+    <div class="app-map" id="appMap">
+      <div class="stars" aria-hidden="true"></div>
+      <div class="map-slot" id="appMapSlot"></div>
+      <div class="ov map-top">
+        <div class="seg" role="tablist" aria-label="Layers">
+          <button type="button" role="tab" data-layer="see" aria-selected="true"><i class="k k-see"></i>SEE</button>
+          <button type="button" role="tab" data-layer="connect" aria-selected="false"><i class="k k-connect"></i>CONNECT</button>
+          <button type="button" role="tab" data-layer="act" aria-selected="false"><i class="k k-act"></i>ACT</button>
+        </div>
+        <div class="map-tools" style="position:relative">
+          <button class="btn" type="button" id="nearMe" title="Go to where you are">Near me</button>
+          <button class="btn" type="button" id="filtersBtn" aria-expanded="false">Filters<span id="filterCount"></span></button>
+          <div class="filters-pop" id="filtersPop" hidden></div>
+        </div>
+        <p class="layer-note" id="layerNote"></p>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="ov ladder" role="group" aria-label="Zoom level">
+        <div class="cap">ZOOM</div>
+        <button type="button" data-level="0"><i class="tick"></i>World</button>
+        <button type="button" data-level="1"><i class="tick"></i>Continent</button>
+        <button type="button" data-level="2"><i class="tick"></i>Country</button>
+        <button type="button" data-level="3"><i class="tick"></i>City</button>
+        <button type="button" data-level="4"><i class="tick"></i>Street</button>
+      </div>
+      <div class="ov map-bottom">
+        <div class="where"><span class="lvl" id="whereLvl"></span><span id="whereTxt">The whole world</span><button type="button" id="listBtn">list</button></div>
+      </div>
+      <button class="ov cta" type="button" id="cta"><i class="pin" aria-hidden="true"></i><span id="ctaText"></span></button>
+      <div class="cross" id="cross" hidden><i></i></div>
+      <div class="ov placebar" id="placebar" hidden>
+        <p>Move the map so the yellow square sits on the problem, or tap the spot. You're posting at <span class="hl" id="placeScale">City</span> scale. Zoom in or out to change it.</p>
+        <div class="row"><button class="btn" type="button" id="placeCancel">Cancel</button><button class="btn primary" type="button" id="placeHere">Put it here</button></div>
+      </div>
+      <aside class="ov mpanel" id="mpanel" hidden aria-live="polite"><div class="grab" aria-hidden="true"></div><div class="mpanel-body" id="mpanelBody"></div></aside>
+      <div class="tip" id="tip" hidden></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-problems" hidden></section>
+  <section class="view" id="view-projects" hidden></section>
+  <section class="view" id="view-people" hidden></section>
+  <section class="view" id="view-problem" hidden></section>
+  <section class="view" id="view-profile" hidden></section>
+  <section class="view" id="view-me" hidden></section>
+  <section class="view" id="view-join" hidden></section>
+  <section class="view" id="view-about" hidden></section>
+  <section class="view" id="view-trust" hidden></section>
+  <section class="view" id="view-mod" hidden></section>
+  <section class="view" id="view-404" hidden></section>
+</main>
+
+<div id="mapPark" hidden><div id="mapShell"><div id="mapEl"></div><div class="map-fallback" id="mapFallback" hidden></div></div></div>
+
+<footer class="footer" id="footer">
+  <div class="wrap">
+    <div class="cols">
+      <div><a class="brand" href="#home"><span class="mark" aria-hidden="true"></span><b id="footName"></b></a><p class="small muted" id="footTagline" style="margin:12px 0 0;max-width:32ch"></p></div>
+      <div><h4>Explore</h4><ul><li><a href="#map">Map</a></li><li><a href="#problems">Problems</a></li><li><a href="#projects">Projects</a></li><li><a href="#people">People</a></li></ul></div>
+      <div><h4>About</h4><ul><li><a href="#about">About</a></li><li><a href="#trust">Trust &amp; safety</a></li><li><a href="#about.contact">Contact</a></li></ul></div>
+      <div><h4>You</h4><ul><li><a href="#join" id="footJoin">Join</a></li><li><a href="#me">Your page</a></li><li><a href="#mod">Moderation</a></li></ul></div>
+    </div>
+    <p class="fine">Mock-up v1. Every person and problem here is a made-up sample, and anything you add is saved only in this browser.
+      Map data © OpenStreetMap contributors · tiles by OpenFreeMap · street search by Photon (komoot) · map library MapLibre · country outlines Natural Earth.</p>
+  </div>
+</footer>
+
+<nav class="tabbar" aria-label="App">
+  <a href="#home" data-nav="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/></svg>Home</a>
+  <a href="#map" data-nav="map"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c3 3 3 13 0 16M12 4c-3 3-3 13 0 16"/></svg>Map</a>
+  <a href="#map" class="post" data-action="post" aria-label="I see this problem"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21"/></svg></a>
+  <a href="#projects" data-nav="projects"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 21 12 12 21 3 12z"/></svg>Projects</a>
+  <a href="#me" data-nav="me"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>You</a>
+</nav>
+
+<div class="modal" id="modal" hidden><div class="modal-card" id="modalCard" role="dialog" aria-modal="true" aria-labelledby="modalTitle"></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/places.js"></script>
+<script src="assets/landmask.js"></script>
+<script src="assets/basestyle.js"></script>
+<script src="assets/map.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
