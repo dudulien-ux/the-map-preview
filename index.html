@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css">
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css?v=20261004e">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -47,8 +47,8 @@
     </div>
   </div>
 </header>
-<div class="banner actas" id="actAsBanner" hidden></div>
-<div class="banner" id="demoBanner" hidden></div>
+<div class="banner actas" id="actAsBanner" role="region" aria-label="Acting-as notice" hidden></div>
+<div class="banner" id="demoBanner" role="region" aria-label="Mock-up notice" hidden></div>
 
 <main id="main" tabindex="-1">
   <!-- HOME -->
@@ -71,8 +71,10 @@
   </section>
 
   <!-- MAP -->
-  <section class="view view-map" id="view-map" hidden aria-label="Map">
+  <section class="view view-map" id="view-map" hidden aria-label="Problem map">
     <div class="app-map" id="appMap">
+      <h1 class="sr-only">Map of problems</h1>
+      <p class="sr-only">The map shows each problem as a light. To hear them as a written list, use the List button below the map, or <a href="#problems">open the Problems page</a>.</p>
       <div class="stars" aria-hidden="true"></div>
       <div class="map-slot" id="appMapSlot"></div>
       <div class="ov map-top">
@@ -104,7 +106,7 @@
       <div class="cross" id="cross" hidden><i></i></div>
       <div class="ov placebar" id="placebar" hidden>
         <p>Move the map so the yellow square sits on the problem, or tap the spot. You're posting at <span class="hl" id="placeScale">City</span> scale. Zoom in or out to change it.</p>
-        <div class="row"><button class="btn" type="button" id="placeCancel">Cancel</button><button class="btn primary" type="button" id="placeHere">Put it here</button></div>
+        <div class="row"><button class="btn" type="button" id="placeType">Type a place instead</button><button class="btn" type="button" id="placeCancel">Cancel</button><button class="btn primary" type="button" id="placeHere">Put it here</button></div>
       </div>
       <aside class="ov mpanel" id="mpanel" hidden aria-live="polite"><div class="grab" aria-hidden="true"></div><div class="mpanel-body" id="mpanelBody"></div></aside>
       <div class="tip" id="tip" hidden></div>
@@ -130,11 +132,11 @@
   <div class="wrap">
     <div class="cols">
       <div><a class="brand" href="#home"><span class="mark" aria-hidden="true"></span><b id="footName"></b></a><p class="small muted" id="footTagline" style="margin:12px 0 0;max-width:32ch"></p></div>
-      <div><h4>Explore</h4><ul><li><a href="#map">Map</a></li><li><a href="#problems">Problems</a></li><li><a href="#projects">Projects</a></li><li><a href="#people">People</a></li></ul></div>
-      <div><h4>About</h4><ul><li><a href="#about">About</a></li><li><a href="#trust">Trust &amp; safety</a></li><li><a href="#about.contact">Contact</a></li></ul></div>
-      <div><h4>You</h4><ul><li><a href="#join" id="footJoin">Join</a></li><li><a href="#me">Your page</a></li><li><a href="#mod">Moderation</a></li></ul></div>
+      <div><h2>Explore</h2><ul><li><a href="#map">Map</a></li><li><a href="#problems">Problems</a></li><li><a href="#projects">Projects</a></li><li><a href="#people">People</a></li></ul></div>
+      <div><h2>About</h2><ul><li><a href="#about">About</a></li><li><a href="#trust">Trust &amp; safety</a></li><li><a href="#about.contact">Contact</a></li></ul></div>
+      <div><h2>You</h2><ul><li><a href="#join" id="footJoin">Join</a></li><li><a href="#me">Your page</a></li><li><a href="#mod">Moderation</a></li></ul></div>
     </div>
-    <p class="fine">Mock-up v1. Every person and problem here is a made-up sample, and anything you add is saved only in this browser.
+    <p class="fine">© 2026 Harper Lien. All rights reserved.<br>Mock-up v1. Every person and problem here is a made-up sample, and anything you add is saved only in this browser.
       Map data © OpenStreetMap contributors · tiles by OpenFreeMap · street search by Photon (komoot) · map library MapLibre · country outlines Natural Earth.</p>
   </div>
 </footer>
@@ -151,11 +153,11 @@
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
-<script src="assets/data.js"></script>
-<script src="assets/places.js"></script>
-<script src="assets/landmask.js"></script>
-<script src="assets/basestyle.js"></script>
-<script src="assets/map.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/data.js?v=20261004e"></script>
+<script src="assets/places.js?v=20261004e"></script>
+<script src="assets/landmask.js?v=20261004e"></script>
+<script src="assets/basestyle.js?v=20261004e"></script>
+<script src="assets/map.js?v=20261004e"></script>
+<script src="assets/app.js?v=20261004e"></script>
 </body>
 </html>

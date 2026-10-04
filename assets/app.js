@@ -445,7 +445,7 @@
         <p class="meta">${esc(placeOf(p))} · ${p.id === 'origin' ? fmtDate(p.t) : ago(p.t)} <span class="coord">${coord(p.lat, p.lon)}</span></p>
         <div class="foot"><span><b>${seenN(p)}</b> see it too</span><span><b>${p.questions.length}</b> ${p.questions.length === 1 ? 'question' : 'questions'}</span><span>team <b>${p.team.length}${p.needs.length ? '/' + p.needs.length : ''}</b></span></div>
       </div>
-      ${p.photo ? `<img class="thumb" src="${p.photo}" alt="">` : ''}
+      ${p.photo ? `<img class="thumb" src="${p.photo}" alt="${esc(p.photoAlt || '')}">` : ''}
     </article>`;
   }
   function projcard(p) {
@@ -491,7 +491,7 @@
     h += `<p class="byline">Posted by ${profileLink(p.by)} · ${esc(placeOf(p))}${p.approx ? ' (approximate spot)' : ''} · ${p.id === 'origin' ? fmtDate(p.t) : ago(p.t)}${p.edited ? ' · edited' : ''}</p>`;
     if (p.bullets) h += `<ul class="bullets">${p.bullets.map(b => `<li>${esc(b)}</li>`).join('')}</ul>`;
     if (p.details && ui.edit !== p.id) h += `<p class="details">${esc(p.details)}</p>`;
-    if (p.photo) h += `<img class="photo" src="${p.photo}" alt="Photo posted with this problem">`;
+    if (p.photo) h += `<img class="photo" src="${p.photo}" alt="${esc(p.photoAlt || 'Photo posted with this problem (no description yet)')}">`;
     h += stepper(st);
     if (st >= 6) h += `<p class="resolved">✓ Resolved ${ago(p.project.resolved.t)}${p.project.resolved.note ? ': ' + esc(p.project.resolved.note) : ''}</p>`;
     const seen = hasSeen(p, u), fol = following(p, u);
@@ -590,19 +590,19 @@
     const stepHref = ['#map', '#map', '#problems', '#people', '#projects', '#projects'];
     $('#homeRest').innerHTML = `
     <section class="band" id="the-problem"><div class="wrap">
-      <p class="eyebrow">${esc(W.headings.problem)}</p>
+      <h2 class="eyebrow">${esc(W.headings.problem)}</h2>
       <p class="label" style="margin-bottom:12px">${esc(W.coreIssueLabel)}</p>
       <p class="statement">${esc(W.coreIssue)}</p>
       <div class="grid-3" style="margin-top:36px">${W.barriers.map(b => `<article class="panelcard"><i class="g off"></i><h3>${esc(b[0])}</h3><p>${esc(b[1])}</p></article>`).join('')}</div>
       ${q2.length === 2 ? `<div class="versus">
         <div class="side-a"><span class="label">top-down</span><q>${esc(q2[0])}</q></div>
         <div class="arrow" aria-hidden="true">→</div>
-        <div class="side-b"><span class="label" style="color:var(--lamp)">from the ground up</span><q>${esc(q2[1])}</q></div>
+        <div class="side-b"><span class="label" style="color:var(--lamp-text)">from the ground up</span><q>${esc(q2[1])}</q></div>
       </div>` : ''}
       <p class="quote"><span class="label">${esc(W.limitationLabel)}</span>${esc(W.limitation)}</p>
     </div></section>
     <section class="band tint" id="the-solution"><div class="wrap">
-      <p class="eyebrow">${esc(W.headings.solution)}</p>
+      <h2 class="eyebrow">${esc(W.headings.solution)}</h2>
       <p class="label" style="margin-bottom:12px">${esc(W.conceptLabel)}</p>
       <p class="statement">${esc(W.concept)}</p>
       <p class="label" style="margin:44px 0 14px">${esc(W.breakthroughsLabel)}</p>
@@ -615,7 +615,7 @@
       </div>
     </div></section>
     <section class="band" id="the-cycle"><div class="wrap">
-      <p class="eyebrow">${esc(W.headings.cycle)}</p>
+      <h2 class="eyebrow">${esc(W.headings.cycle)}</h2>
       <ol class="lights" style="margin-top:34px">${CYCLE.map((c, i) => `<li><a href="${stepHref[i]}"${i === 1 ? ' data-action="post"' : ''}><span class="bulb">${i + 1}</span><b>${esc(c[0])}</b><span>${esc(c[1])}</span></a></li>`).join('')}</ol>
       <p class="label" style="margin-top:50px">${esc(W.mindsetLabel)}</p>
       <ol class="mindset">${W.mindset.map(m => `<li>${esc(m)}</li>`).join('')}</ol>
@@ -631,19 +631,19 @@
       </div>
     </div></section>
     <section class="band" id="local-global"><div class="wrap">
-      <p class="eyebrow">${esc(W.headings.localGlobal)}</p>
+      <h2 class="eyebrow">${esc(W.headings.localGlobal)}</h2>
       <h2 class="h2">${esc(W.localGlobalLabel)}</h2>
       <p class="body">${esc(W.localGlobal)}</p>
       <p class="body muted">${esc(W.globalUsers)}</p>
       ${pairs.length ? `<p class="label" style="margin-top:36px">Similar problems in different countries</p><div class="pairs">${pairs.map(pr => `<div class="pair">${pr.map(p => `<a href="#p.${esc(p.id)}"><span class="pin"><i class="g s${stageOf(p)}"></i></span><span><span class="m">${esc(placeOf(p))}</span><span class="t">${esc(p.text)}</span></span></a>`).join('')}</div>`).join('')}</div>` : ''}
     </div></section>
     <section class="band tint" id="trust-preview"><div class="wrap">
-      <p class="eyebrow">${esc(W.headings.trust)}</p>
+      <h2 class="eyebrow">${esc(W.headings.trust)}</h2>
       <div class="grid-3">${W.moderation.map((m, i) => `<article class="panelcard"><i class="g ${['s1', 's3', 's5'][i]}"></i><h3>${esc(m[0])}</h3><p>${esc(m[1])}</p></article>`).join('')}</div>
       <p style="margin-top:28px"><a class="more" href="#trust">How safety works in this mock-up</a></p>
     </div></section>
     <section class="band cta-band" id="join-us"><div class="stars" aria-hidden="true"></div><div class="wrap" style="position:relative">
-      <p class="eyebrow">${esc(W.ctaLabel)}</p>
+      <h2 class="eyebrow">${esc(W.ctaLabel)}</h2>
       <p class="h-display" style="max-width:20ch">“${esc(W.cta)}”</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:36px">
         <a class="btn primary big" href="${who() ? '#map' : '#join'}"${who() ? ' data-action="post"' : ''}>${who() ? esc(W.prompt) : 'Join'}</a>
@@ -666,7 +666,7 @@
           <select class="select" id="pStage" aria-label="Stage"><option value="">Any stage</option>${STAGE_GROUPS.map(g => `<option value="${g[0]}">${g[1]}</option>`).join('')}</select>
           <select class="select" id="pTag" aria-label="Topic"><option value="">Any topic</option>${D.TAGS.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join('')}</select>
           <select class="select" id="pSort" aria-label="Sort"><option value="new">Newest</option><option value="seen">Most seen</option><option value="help">Needs people</option><option value="active">Recently active</option></select>
-        </div><div id="pList"></div></div>`;
+        </div><h2 class="sr-only">Problems in this list</h2><div id="pList"></div></div>`;
       v.dataset.built = '1';
       const upd = () => { PF.q = $('#pQ').value; PF.scale = $('#pScale').value; PF.stage = $('#pStage').value; PF.tag = $('#pTag').value; PF.sort = $('#pSort').value; renderPList(); };
       $('#pQ').addEventListener('input', debounce(upd, 150));
@@ -693,7 +693,7 @@
     const opts = [['', 'All'], ['create', 'CREATE'], ['act', 'ACT'], ['resolved', 'RESOLVED']];
     $('#view-projects').innerHTML = `<div class="wrap"><header class="page-head"><div><h1>Projects</h1><p class="sub">${esc(W.layers.act)}</p></div></header>
       <div class="toolbar"><span class="label">Show</span>${opts.map(o => `<button class="chipb" type="button" data-act="projF" data-id="${o[0]}" aria-pressed="${projF === o[0]}">${o[1]}</button>`).join('')}</div>
-      ${P.length ? `<div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">${P.map(projcard).join('')}</div>` : '<div class="empty">No projects here yet. A project forms when a team comes together around a problem.</div>'}
+      <h2 class="sr-only">Projects in this list</h2>${P.length ? `<div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))">${P.map(projcard).join('')}</div>` : '<div class="empty">No projects here yet. A project forms when a team comes together around a problem.</div>'}
       <div style="height:64px"></div></div>`;
   };
 
@@ -705,7 +705,7 @@
     $('#view-people').innerHTML = `<div class="wrap"><header class="page-head"><div><h1>People</h1><p class="sub">${esc(W.layers.connect)}</p></div>
       ${who() ? '' : '<a class="btn primary" href="#join">Join</a>'}</header>
       <div class="toolbar"><span class="label">Skill</span><button class="chipb blue" type="button" data-act="peopleF" data-id="" aria-pressed="${!peopleF}">Everyone</button>${W.skills.map(s => `<button class="chipb blue" type="button" data-act="peopleF" data-id="${esc(s)}" aria-pressed="${peopleF === s}">${esc(s)}</button>`).join('')}</div>
-      <div class="cards">${ppl.map(personcard).join('')}</div><div style="height:64px"></div></div>`;
+      <h2 class="sr-only">People in this list</h2><div class="cards">${ppl.map(personcard).join('')}</div><div style="height:64px"></div></div>`;
   };
 
   // One problem
@@ -717,14 +717,14 @@
     $('#view-problem').innerHTML = `<div class="wrap">
       <p class="crumbs"><a href="#problems">Problems</a> / ${esc(placeOf(p))}</p>
       <div class="detail"><article>${problemMain(p, true)}</article>
-      <aside class="side">
-        <div class="sidebox"><img class="locbig" src="${locator(p.lat, p.lon, 150)}" alt="Where it is on the globe" width="150" height="150">
+      <div class="side">
+        <div class="sidebox"><img class="locbig" src="${locator(p.lat, p.lon, 150)}" alt="${esc('Where it is on the globe: ' + placeOf(p))}" width="150" height="150">
           <dl class="facts"><dt>Where</dt><dd>${esc(placeOf(p))}${p.approx ? '<br><span class="small muted">approximate spot, to keep homes private</span>' : ''}</dd>
           <dt>Scale</dt><dd>${esc(SCALE_LABEL[p.scale])}</dd><dt>Posted</dt><dd>${fmtDate(p.t)}</dd>${tagsHTML ? `<dt>Topics</dt><dd>${tagsHTML}</dd>` : ''}
           <dt>Stage</dt><dd>${stageLabel(stageOf(p))}</dd><dt>On the globe</dt><dd class="coord" style="font-size:13px">${coord(p.lat, p.lon)}</dd></dl>
           <p style="margin:14px 0 0"><button class="btn" type="button" data-act="showOnMap" data-id="${esc(p.id)}" style="width:100%">Show on the map</button></p></div>
         ${sim.length ? `<div class="sidebox"><h3>Similar elsewhere</h3><p class="small muted" style="font-style:italic;margin:0 0 12px">${esc(W.localGlobal)}</p><ul class="golist">${sim.map(goItem).join('')}</ul></div>` : ''}
-      </aside></div></div>`;
+      </div></div></div>`;
   };
 
   // A person
@@ -838,16 +838,16 @@
   RENDER.about = () => {
     $('#view-about').innerHTML = `<div class="wrap">
       <header class="page-head"><div><h1>About</h1><p class="sub">${esc(W.tagline)}</p></div></header>
-      <section class="band" style="border-top:0;padding-top:10px"><p class="eyebrow">${esc(W.headings.solution)}</p><p class="label">${esc(W.conceptLabel)}</p><p class="statement">${esc(W.concept)}</p>
+      <section class="band" style="border-top:0;padding-top:10px"><h2 class="eyebrow">${esc(W.headings.solution)}</h2><p class="label">${esc(W.conceptLabel)}</p><p class="statement">${esc(W.concept)}</p>
         <p class="label" style="margin:30px 0 12px">${esc(W.breakthroughsLabel)}</p><div class="grid-3">${W.breakthroughs.map(b => `<article class="panelcard"><p>${esc(b)}</p></article>`).join('')}</div></section>
-      <section class="band"><p class="eyebrow">${esc(W.headings.product)}</p><p class="label">${esc(W.coreInterfaceLabel)}</p><p class="statement">${esc(W.coreInterface)}</p>
+      <section class="band"><h2 class="eyebrow">${esc(W.headings.product)}</h2><p class="label">${esc(W.coreInterfaceLabel)}</p><p class="statement">${esc(W.coreInterface)}</p>
         <p class="label" style="margin:30px 0 12px">${esc(W.ecosystemLabel)}</p><div class="layers3">
         <div><p class="ttl"><i class="g s1"></i>SEE</p><p>${esc(W.layers.see)}</p></div><div><p class="ttl"><i class="g person"></i>CONNECT</p><p>${esc(W.layers.connect)}</p></div><div><p class="ttl"><i class="g s5"></i>ACT</p><p>${esc(W.layers.act)}</p></div></div></section>
-      <section class="band"><p class="eyebrow">${esc(W.headings.localGlobal)}</p><h2 class="h2">${esc(W.localGlobalLabel)}</h2><p class="body">${esc(W.localGlobal)}</p><p class="body">${esc(W.globalUsers)}</p></section>
-      <section class="band"><p class="eyebrow">${esc(W.headings.business)}</p><div class="grid-3">${W.business.map(b => `<article class="panelcard"><h3>${esc(b[0])}</h3><p>${esc(b[1])}</p></article>`).join('')}</div></section>
-      <section class="band"><p class="eyebrow">${esc(W.headings.roadmap)}</p><ol class="roadmap">${W.roadmap.map(r => `<li><b>${esc(r[0])}</b><span>${esc(r[1])}</span></li>`).join('')}</ol></section>
-      <section class="band"><p class="eyebrow">${esc(W.headings.team)}</p><div class="grid-4">${W.team.map(t => `<article class="panelcard"><h3>${esc(t[0])}</h3><p>${esc(t[1])}</p></article>`).join('')}</div></section>
-      <section class="band" id="contact"><p class="eyebrow">${esc(W.headings.cta)}</p><p class="statement">"${esc(W.cta)}"</p>
+      <section class="band"><h2 class="eyebrow">${esc(W.headings.localGlobal)}</h2><h2 class="h2">${esc(W.localGlobalLabel)}</h2><p class="body">${esc(W.localGlobal)}</p><p class="body">${esc(W.globalUsers)}</p></section>
+      <section class="band"><h2 class="eyebrow">${esc(W.headings.business)}</h2><div class="grid-3">${W.business.map(b => `<article class="panelcard"><h3>${esc(b[0])}</h3><p>${esc(b[1])}</p></article>`).join('')}</div></section>
+      <section class="band"><h2 class="eyebrow">${esc(W.headings.roadmap)}</h2><ol class="roadmap">${W.roadmap.map(r => `<li><b>${esc(r[0])}</b><span>${esc(r[1])}</span></li>`).join('')}</ol></section>
+      <section class="band"><h2 class="eyebrow">${esc(W.headings.team)}</h2><div class="grid-4">${W.team.map(t => `<article class="panelcard"><h3>${esc(t[0])}</h3><p>${esc(t[1])}</p></article>`).join('')}</div></section>
+      <section class="band" id="contact"><h2 class="eyebrow">${esc(W.headings.cta)}</h2><p class="statement">"${esc(W.cta)}"</p>
         <div class="grid-2" style="margin-top:28px;align-items:start">
           <div><p class="label">${esc(W.needsLabel)}</p><p class="body" style="margin-top:6px">${esc(W.needs)}</p><p class="label" style="margin-top:22px">${esc(W.contactLabel)}</p><p class="body" style="margin-top:6px">${esc(W.contact)}</p></div>
           <form class="formcard" data-form="contact"><div class="field"><label for="cfName">Your name</label><input class="input" id="cfName" name="name" maxlength="60" required></div>
@@ -860,7 +860,7 @@
   RENDER.trust = () => {
     $('#view-trust').innerHTML = `<div class="wrap">
       <header class="page-head"><div><h1>Trust &amp; safety</h1><p class="sub">${esc(W.headings.trust)}</p></div></header>
-      <div class="grid-3">${W.moderation.map(m => `<article class="panelcard"><h3>${esc(m[0])}</h3><p>${esc(m[1])}</p></article>`).join('')}</div>
+      <h2 class="sr-only">From the pitch</h2><div class="grid-3">${W.moderation.map(m => `<article class="panelcard"><h3>${esc(m[0])}</h3><p>${esc(m[1])}</p></article>`).join('')}</div>
       <section class="band" style="margin-top:48px"><h2 class="h2">How this mock-up does it</h2><div class="grid-2">
         <article class="panelcard"><h3>Verification</h3><p>"I see it too" is one tap per person, and the count is on every problem.</p></article>
         <article class="panelcard"><h3>Status on every pin</h3><p>Each problem shows where it is in the cycle, from SHARE to RESOLVED. Resolved ones turn into white rings.</p></article>
@@ -1093,6 +1093,7 @@
   function stopPlacing() { placing = false; $('#cross').hidden = true; $('#placebar').hidden = true; $('#cta').hidden = false; $('#appMap').classList.remove('placing'); }
   $('#cta').addEventListener('click', startPost);
   $('#placeCancel').addEventListener('click', () => { stopPlacing(); pending = null; });
+  $('#placeType').addEventListener('click', () => openSearch());
   $('#placeHere').addEventListener('click', () => {
     const c = MapView.center(), li = MapView.level();
     const n = nearest(c.lat, c.lng);
@@ -1118,6 +1119,7 @@
       <fieldset class="field" style="border:0;padding:0"><legend class="flabel" style="font:700 11px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">Topics <span class="muted" style="text-transform:none;font-weight:400">(they link it to similar problems elsewhere)</span></legend>
         <div class="opts">${D.TAGS.map(s => `<label class="opt"><input type="checkbox" name="tag" value="${esc(s)}"${(P.tags || []).includes(s) ? ' checked' : ''}><span>${esc(s)}</span></label>`).join('')}</div></fieldset>
       <div class="field"><label for="poPhoto">Photo <span class="muted">(optional, no faces, names or house numbers)</span></label><input id="poPhoto" type="file" accept="image/*" style="font:13px var(--mono)"></div>
+      <div class="field" id="poAltField" hidden><label for="poAlt">Describe the photo <span class="muted">(for people who can't see it)</span></label><input class="input" id="poAlt" name="photoAlt" maxlength="160" placeholder="For example: a bus stop with a broken roof"></div>
       <div class="actions" style="justify-content:space-between;margin-top:8px"><button class="btn" type="button" data-act="movePin">Move the pin</button><button class="btn primary" type="submit" id="poSubmit">Post on the map</button></div>
       <p class="small mono muted" style="margin:12px 0 0">${who() ? 'Posting as ' + esc(nameOf(who())) + '. Saved in this browser.' : "You'll join first. What you wrote is kept."}</p>
     </form>`;
@@ -1127,7 +1129,7 @@
     const w = $('#poWhere'); if (w) w.addEventListener('input', () => { if (pending) pending.placeEdited = true; });
     const ph = $('#poPhoto');
     if (ph) ph.addEventListener('change', async () => {
-      const f = ph.files && ph.files[0]; draftPhoto = null; if (!f) return;
+      const f = ph.files && ph.files[0]; draftPhoto = null; $('#poAltField').hidden = !f; if (!f) return;
       try { draftPhoto = await shrinkPhoto(f); } catch (e) { toast("That photo couldn't be read. Try another one."); }
     });
     forcePost = false;
@@ -1176,7 +1178,7 @@
     const [lat, lon] = v.approx ? approxSpot(pending.lat, pending.lon) : [pending.lat, pending.lon];
     const p = { id: uid('p'), by: who(), t: now(), text: v.text, details: v.details || undefined, place: v.place, country: v.country, lat, lon, approx: v.approx, scale: v.scale,
       tags: v.tags, needs: v.needs, seen: [], seenExtra: 0, questions: [], team: [], project: null };
-    if (draftPhoto) p.photo = draftPhoto;
+    if (draftPhoto) { p.photo = draftPhoto; const alt = (f.photoAlt && f.photoAlt.value || '').trim(); if (alt) p.photoAlt = alt; }
     S.problems[p.id] = p;
     if (!save() && p.photo) { delete p.photo; save(); }
     draftPhoto = null; pending = null; forcePost = false;
@@ -1253,7 +1255,10 @@
     closeModal();
     if (x.type === 'problem') { go('#p.' + x.id); return; }
     if (x.type === 'person') { go('#u.' + x.id); return; }
-    const fly = () => whenMapReady(() => { if (panelMode && panelMode !== 'post') closePanel(); MapView.flyTo(x.lon, x.lat, x.km); });
+    const fly = () => whenMapReady(() => {
+      if (panelMode && panelMode !== 'post') closePanel(); MapView.flyTo(x.lon, x.lat, x.km);
+      if (placing) { toast(`Moved to ${x.label}. Press "Put it here" if that's the place.`); $('#placeHere').focus(); }
+    });
     if (R.name !== 'map') { pendingAction = fly; go('#map'); } else fly();
   }
 
